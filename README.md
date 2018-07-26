@@ -1,3 +1,3 @@
-# FRGAN: Learning to Forecast and Refine Residual Motion :page_with_curl:
+# FRGAN: Learning to Forecast and Refine Residual Motion
 
 Code will come soon.
