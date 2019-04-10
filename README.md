@@ -107,4 +107,4 @@ To test the network, try:
 >> python mug_test.py --img_dir_path datasets/mug/mug64/ --out_dir_path examples --checkpoint $CHECKPOINT_PATH$
 ```
 
-Replace `$CHECKPOINT_PATH$` by the path to the checkpoint saving during training.
+Replace `$CHECKPOINT_PATH$` by the path to the checkpoint saved during training.
