@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)https://sites.google.com/a/umich.edu/rubenevillegas/hierch_vid -->
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope="" itemtype="http://schema.org/WebPage"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="title" content="Learning to Forecast and Refine Residual Motion for Image-to-Video Generation">
+<style type="text/css">
+
+.pose img {
+  height: 220px;
+}
+      
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxp6iIh_FvlUHQwED9Yt5Kbw.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxi_vZmeiCMnoWNN9rHBYaTc.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxiFaMxiho_5XQnyRZzQsrZs.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxgalQocB-__pDVGhF3uS2Ks.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxmhQUTDJGru-0vvUpABgH8I.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxujkDdvhIIFj_YMdgqpnSB0.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v15/PRmiXeptR36kaC0GEAetxolIZu-HDpmDIZMigmsroc4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/K88pR3goAWT7BTt32Z01mxJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/RjgO7rYTmqiVp7vzi-Q5URJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/LWCjsQkB6EMdfHrEVqA1KRJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/xozscpT2726on7jbcb_pAhJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/59ZRklaO5bWGqF5A9baEERJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/u-WUoqrET9fUeobQW7jkRRJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzK-j2U0lmluP9RWlSytm3ho.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzJX5f-9o1vgP2EXwfjgl7AY.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzBWV49_lSm1NYrwo-zkhivY.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzKaRobkAwv3vxw3jMhVENGA.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzP8zf_FOSsgRmwsS7Aa9k2w.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzD0LW-43aMEzIO6XUTLjad8.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://fonts.gstatic.com/s/opensans/v15/k3k702ZOKiLJc3WVjuplzOgdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBjTOQ_MqJVwkKsUn0wKzc2I.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBjUj_cnvWIuuBMVgbX098Mw.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBkbcKLIaa1LC45dFaAfauRA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBmo_sUJ8uO4YLWRInS22T3Y.woff2) format('woff2');
+  unicode-range: U+0370-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBr6up8jxqWt8HVA3mDhkV_0.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBiYE0-AqJ3nfInTTiDXDjU4.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(https://fonts.gstatic.com/s/opensans/v15/xjAJXh38I15wypJXxuGMBo4P5ICox8Kq3LLUNMylGO4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+    
+</style>
+<link rel="stylesheet" type="text/css" href="./css/standard-css-ski-ltr-ltr.css">
+<link rel="stylesheet" type="text/css" href="./css/overlay.css">
+<link rel="stylesheet" type="text/css" href="./css/allthemes-view.css">
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/a/umich.edu/rubenevillegas/system/app/css/camelot/allthemes%2die.css" />
+<![endif]-->
+<title>Learning to Forecast and Refine Residual Motion for Image-to-Video Generation</title>
+</head>
+<body xmlns="http://www.google.com/ns/jotspot" id="body" class="en">
+<div id="sites-chrome-everything-scrollbar">
+<div id="sites-chrome-everything" class="" style="padding-bottom:0px;">
+<div id="sites-chrome-page-wrapper" style="direction: ltr">
+<div id="sites-chrome-main-wrapper">
+<div id="sites-chrome-main-wrapper-inside">
+<table id="sites-chrome-main" class="sites-layout-hbox" cellspacing="0" border="0">
+<tbody><tr>
+<td id="sites-chrome-sidebar-left" class="sites-layout-sidebar-left" style="display: none; width: 100px">
+</td>
+<td id="sites-canvas-wrapper">
+<div id="sites-canvas" role="main">
+<div id="sites-canvas-main" class="sites-canvas-main">
+<div id="sites-canvas-main-content">
+<table xmlns="http://www.w3.org/1999/xhtml" cellspacing="0" class="sites-layout-name-one-column sites-layout-hbox"><tbody><tr><td class="sites-layout-tile sites-tile-name-content-1"><div dir="ltr"><font face="verdana, sans-serif"><span style="color:rgb(0,0,0)">
+</span>
+</font>
+<div style="text-align:center"><font color="#000000" face="verdana, sans-serif" size="6"><b>Learning to Forecast and Refine Residual
+</b></font></div>
+<div style="text-align:center"><font color="#000000" face="verdana, sans-serif" size="6"><b>Motion for Image-to-Video Generation</b></font></div>
+<div style="text-align:center"><span style="font-family:verdana,sans-serif"><span style="color:rgb(0,0,0)"><span style="background-color:transparent"><font size="6"><b>
+<br>
+</b></font></span></span></span><span style="font-family:verdana,sans-serif"><font color="#000000"><font size="3"><a href="http://garyzhao.github.io/" rel="nofollow">Long Zhao</a></font><sup><font size="2">1</font></sup><font size="3">,</font><span style="font-size:medium">&nbsp;</span><font size="3"><a href="https://sites.google.com/site/xipengcshomepage/" rel="nofollow">Xi Peng</a></font><sup><font size="2">2</font></sup><font size="3">,</font><span style="font-size:medium">&nbsp;</span><font size="3">Yu Tian</font><sup><font size="2">1</font></sup></font></span><font size="3" style="background-color:transparent;color:rgb(0,0,0);font-family:verdana,sans-serif">,</font><font color="#000000" style="font-family:verdana,sans-serif;background-color:transparent"><span style="font-size:medium">&nbsp;</span><font size="3"><a href="https://www.cs.rutgers.edu/~mk1353/" rel="nofollow">Mubbasir Kapadia</a><sup>1</sup></font></font><font size="3" style="background-color:transparent;color:rgb(0,0,0);font-family:verdana,sans-serif">,</font><span style="background-color:transparent;font-family:verdana,sans-serif;color:rgb(0,0,0);font-size:medium">&nbsp;</span><span style="background-color:transparent;font-family:verdana,sans-serif;color:rgb(0,0,0);font-size:medium"><a href="https://www.cs.rutgers.edu/~dnm/" rel="nofollow">Dimitris Metaxas</a><sup>1</sup></span></div>
+<span style="font-family:verdana,sans-serif">
+<span style="color:rgb(0,0,0)">
+</span>
+</span>
+
+<br/>
+<div style="font-size:xx-large;display:block;text-align:center;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><font size="3"><span style="color:rgb(0,0,0)"><sup>1</sup>Rutgers, The State University of New Jersey, Piscataway, USA<br/>
+</font></font></span></div>
+<div style="font-size:xx-large;display:block;text-align:center;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><font color="#000000"><font size="3"><sup>2</sup>Binghamton University - State University of New York (SUNY), Binghamton, USA</font></font></span></div>
+
+<br/>
+<br/>
+
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><font color="#000000" size="4"><b><br>
+</b></font></span></div>
+
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><font color="#000000" size="4"><b>Abstract:</b></font></span></div>
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="text-align:center;background-color:transparent;white-space:pre-wrap"><font color="#000000" face="verdana, sans-serif" size="3">We consider the problem of image-to-video translation, where an input image is translated into an output video containing motions of a single object. Recent methods for such problems typically train transformation networks to generate future frames conditioned on the structure sequence. Parallel work has shown that short high-quality motions can be generated by spatiotemporal generative networks that leverage temporal knowledge from the training data. We combine the benefits of both approaches and propose a two-stage generation framework where videos are generated from structures and then refined by temporal signals. To model motions more efficiently, we train networks to learn residual motion between the current and future frames, which avoids learning motion-irrelevant details. We conduct extensive experiments on two image-to-video translation tasks: facial expression retargeting and human pose forecasting. Superior results over the state-of-the-art methods on both tasks demonstrate the effectiveness of our approach</font></span><span style="text-align:center;background-color:transparent;white-space:pre-wrap"><font color="#000000" face="verdana, sans-serif" size="3">.</font></span></div>
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><span style="color:rgb(0,0,0);font-size:14.6667px;white-space:pre-wrap;background-color:transparent"><br/>
+</span></span></div>
+
+
+<div style="margin-right:auto;margin-left:auto"><span style="color:rgb(0,0,0);white-space:pre-wrap;background-color:transparent"><b><font face="verdana, sans-serif" size="4">Paper:</font></b></span></div>
+<div><font face="verdana, sans-serif" color="#000000" size="3"><b>Learning to Forecast and Refine Residual Motion for Image-to-Video Generation</b></font></span><span style="background-color:transparent"><font color="#000000" size="3"><b>.</b></font></span></font></div>
+<div><font color="#000000" face="verdana, sans-serif" size="3"><i style="line-height:normal"><b>Long Zhao</b>, Xi Peng, Yu Tian, Mubbasir Kapadia, Dimitris Metaxas.</i></font></div>
+</div>
+<div><font color="#000000" face="verdana, sans-serif" size="3">In <i>Proceedings of the 15th European Conference on Computer Vision (<b>ECCV</b>),</i> 2018.</font></div>
+<div><em style="line-height:18px"><font face="verdana, sans-serif" size="3"><span style="font-style:normal;background-color:transparent"><font color="#000000">[<a href="http://openaccess.thecvf.com/content_ECCV_2018/papers/Long_Zhao_Learning_to_Forecast_ECCV_2018_paper.pdf" rel="nofollow">PDF</a>][<a href="https://arxiv.org/pdf/1807.09951.pdf" rel="nofollow">ArXiv</a>][<a href="https://github.com/garyzhao/FRGAN" rel="nofollow">Code will come soon.</a></font></span><span style="font-style:normal;background-color:transparent"><font color="#000000">]</font></span></font></em></div>
+
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><br/>
+</span>
+</div>
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="font-family:verdana,sans-serif"><br/>
+</span>
+</div>
+
+<br/>
+<div style="text-align:left;color:rgb(0,0,0);"><b><font size="5">Facial Expression Retargeting</font></b></div>
+<hr/>
+
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="text-align:center;background-color:transparent;white-space:pre-wrap"><font color="#000000" face="verdana, sans-serif" size="3">Examples of facial expression retargeting using our algorithm on the MUG Facial Expression Database [1]. We show three expressions as an illustration, from top to bottom: happiness, disgust and surprise. The reference videos are highlighted in green, while the generated frames are highlighted in red.</font></span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Happiness</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block"><img border="0" src="./examples_retargeting/happiness.gif" style="width:100%"></div>
+</span></div>
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Disgust</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block"><img border="0" src="./examples_retargeting/disgust.gif" style="width:100%"></div>
+</span></div>
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Surprise</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block"><img border="0" src="./examples_retargeting/surprise.gif" style="width:100%"></div>
+</span></div>
+
+<br/>
+<br/>
+<br/>
+<div style="text-align:left;color:rgb(0,0,0);"><b><font size="5"> Human Pose Forecasting</font></b></div>
+<hr/>
+
+
+<div style="text-align:left;display:block;margin-right:auto;margin-left:auto"><span style="text-align:center;background-color:transparent;white-space:pre-wrap"><font color="#000000" face="verdana, sans-serif" size="3">Visual comparison of our method with Villegas et al. [2] on the Penn Action Dataset [3]. Examples are sampled from six different action categories: baseball, clean and jerk, golf swing, jump rope, jumping jacks, and tennis respectively.</font></span></div>
+
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Baseball</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/baseball/0.gif">&nbsp;<img border="0" src="./examples_pose/baseball/1.gif">&nbsp;<img border="0" src="./examples_pose/baseball/2.gif">&nbsp;<img border="0" src="./examples_pose/baseball/3.gif">&nbsp;<img border="0" src="./examples_pose/baseball/4.gif">&nbsp;<img border="0" src="./examples_pose/baseball/5.gif">&nbsp;<img border="0" src="./examples_pose/baseball/6.gif">&nbsp;<img border="0" src="./examples_pose/baseball/7.gif">&nbsp;<img border="0" src="./examples_pose/baseball/8.gif">&nbsp;<img border="0" src="./examples_pose/baseball/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Clean and Jerk</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/clean_and_jerk/0.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/1.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/2.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/3.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/4.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/5.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/6.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/7.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/8.gif">&nbsp;<img border="0" src="./examples_pose/clean_and_jerk/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Golf Swing</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/golf_swing/0.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/1.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/2.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/3.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/4.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/5.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/6.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/7.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/8.gif">&nbsp;<img border="0" src="./examples_pose/golf_swing/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Jump Rope</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/jump_rope/0.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/1.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/2.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/3.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/4.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/5.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/6.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/7.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/8.gif">&nbsp;<img border="0" src="./examples_pose/jump_rope/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Jumping Jacks</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/jumping_jacks/0.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/1.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/2.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/3.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/4.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/5.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/6.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/7.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/8.gif">&nbsp;<img border="0" src="./examples_pose/jumping_jacks/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="text-align:center;color:rgb(0,0,0);text-decoration: underline;"><b><font size="4">Tennis</font></b></div>
+<div style="display:block;text-align:left"><span style="color:rgb(0,0,0);font-size:medium;background-color:transparent">
+<div style="text-align:center;display:block" class="pose"><img border="0" src="./css/pose_tag.jpg"><img border="0" src="./examples_pose/tennis/0.gif">&nbsp;<img border="0" src="./examples_pose/tennis/1.gif">&nbsp;<img border="0" src="./examples_pose/tennis/2.gif">&nbsp;<img border="0" src="./examples_pose/tennis/3.gif">&nbsp;<img border="0" src="./examples_pose/tennis/4.gif">&nbsp;<img border="0" src="./examples_pose/tennis/5.gif">&nbsp;<img border="0" src="./examples_pose/tennis/6.gif">&nbsp;<img border="0" src="./examples_pose/tennis/7.gif">&nbsp;<img border="0" src="./examples_pose/tennis/8.gif">&nbsp;<img border="0" src="./examples_pose/tennis/9.gif"></div>
+</span></div>
+
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+<div style="color:rgb(0,0,0);text-align:center"><br></div>
+
+<div style="margin-right:auto;margin-left:auto"><span style="color:rgb(0,0,0);white-space:pre-wrap;background-color:transparent"><b><font face="verdana, sans-serif" size="4">References:</font></b></span></div>
+<div><font color="#000000" face="verdana, sans-serif" size="3"><i style="line-height:normal">[1] Aifanti, N., Papachristou, C., Delopoulos, A.: The MUG facial expression database. In: International Workshop on Image Analysis for Multimedia Interactive Services (WIAMIS), 2010.</i></font></div>
+<div><font color="#000000" face="verdana, sans-serif" size="3"><i style="line-height:normal">[2] Villegas, R., Yang, J., Zou, Y., Sohn, S., Lin, X., Lee, H.: Learning to generate longterm future via hierarchical prediction. In: International Conference on Machine Learning (ICML), 2017.</i></font></div>
+<div><font color="#000000" face="verdana, sans-serif" size="3"><i style="line-height:normal">[3] Zhang, W., Zhu, M., Derpanis, K.: From Actemes to Action: A Strongly-supervised Representation for Detailed Action Understanding. In: IEEE International Conference on Computer Vision (ICCV), 2013.</i></font></div>
+
+<div id="sites-canvas-bottom-panel"  style="margin-bottom: 100px">
+<div xmlns="http://www.w3.org/1999/xhtml" id="COMP_page-subpages" class="sites-canvas-bottom-panel-wrapper" style="">
+</div>
+<div id="sites-attachments-container">
+</div>
+</div>
+</div> 
+</td> 
+</tr>
+</tbody></table> 
+</div> 
+</div> 
+<div id="sites-chrome-footer-wrapper">
+<div id="sites-chrome-footer-wrapper-inside">
+<div id="sites-chrome-footer">
+</div>
+</div>
+</div>
+</div> 
+</div> 
+<div id="sites-chrome-adminfooter-container">
+</div>
+</div> 
+</div> 
+<div id="sites-chrome-onebar-footer">
+</div>
+
+
+</body></html>
